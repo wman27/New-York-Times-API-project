@@ -1,17 +1,74 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+require('dotenv').config();
+const api_key = process.env.REACT_APP_KEY;
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+export default class TopStories extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data:{
+                results:[{
+                    title:"",
+                    abstract:"",
+                    url:"",
+                    published_date:""    
+                }]
+            }
+        };
+        this.articleData = this.articleData.bind(this);
+        this.errorHandle = this.errorHandle.bind(this);
+        this.parseDate = this.parseDate.bind(this);
+    };
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+    articleData(newdata) {
+        if(newdata !== undefined) {
+            this.setState({
+                data: newdata
+            });
+        };
+    }
+
+    errorHandle(response) {
+        if(!response.ok){
+            document.getElementById("error").innerHTML="There was an error retrieving the data!";
+        } else {
+            document.getElementById("error").innerHTML=" ";
+            return response.json();
+        };
+    }
+    parseDate(date) {
+        let year = date.substring(0,4);
+        let month = date.substring(5,7);
+        let day = date.substring(8,10);
+        return day+"/"+month+"/"+year;
+    }
+    componentDidMount() {
+        fetch(      
+            "https://api.nytimes.com/svc/topstories/v2/home.json?api-key="+api_key
+        )
+        .then(response => this.errorHandle(response))
+        .then(response => this.articleData(response))
+    }
+     
+    render() {
+        return (
+            <div>
+                <div className="container-fluid">
+                    <p id="error"></p>
+                </div>
+                
+                <div className="container-fluid">
+                    {this.state.data.results.map(articles=>
+                        <div className="card m-3" key={articles.title+articles.published_date}>  
+                            <div className="card-body">
+                                <h5 className="card-title">{articles.title}</h5>
+                                <p className="card-text">{articles.abstract}</p>
+                                <p className="card-text"><small className="text-muted">Published {this.parseDate(articles.published_date)}</small></p>
+                                <a href={articles.url}>Read More</a>
+                            </div> 
+                        </div>
+                    )}
+                </div>
+            </div>
+        )
+    }
+}
