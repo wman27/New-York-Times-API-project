@@ -1,6 +1,3 @@
-require('dotenv').config();
-const api_key = process.env.REACT_APP_KEY;
-
 export default class SearchArticles extends React.Component {
     constructor(props) {
         super(props);
@@ -50,7 +47,7 @@ export default class SearchArticles extends React.Component {
 
     searchArticle() {
         fetch(
-            "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+this.state.query+"&api-key="+api_key
+            "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+this.state.query+"&api-key="+process.env.REACT_APP_KEY
         )
         .then(response=>this.errorHandle(response))
         .then(response=>this.searchResults(response))

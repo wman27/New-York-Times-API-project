@@ -1,6 +1,3 @@
-require('dotenv').config();
-const api_key = process.env.REACT_APP_KEY;
-
 export default class SearchBooks extends React.Component {
     constructor(props) {
         super(props);
@@ -47,7 +44,7 @@ export default class SearchBooks extends React.Component {
 
     componentDidMount() {
         fetch(
-            "https://api.nytimes.com/svc/books/v3/lists/names.json?api-key="+api_key
+            "https://api.nytimes.com/svc/books/v3/lists/names.json?api-key="+process.env.REACT_APP_KEY
             )
         .then(response=>this.errorHandle(response))
         .then(response=>this.categoryNames(response));
@@ -70,7 +67,7 @@ export default class SearchBooks extends React.Component {
     filter() {
         let category = this.state.category;
         fetch(
-            "https://api.nytimes.com/svc/books/v3/lists/current/"+category+".json?api-key="+api_key
+            "https://api.nytimes.com/svc/books/v3/lists/current/"+category+".json?api-key="+process.env.REACT_APP_KEY
         ).then(response=>this.errorHandle(response))
         .then(response=>this.filteredResults(response))
         

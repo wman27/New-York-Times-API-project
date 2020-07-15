@@ -1,53 +1,54 @@
 const path = require("path");
-const Dotenv = require("dotenv-webpack");
-
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 
-module.exports = {
-    mode: "development",
-    entry:{
-        display:"./src/display.js"
-    },
-    output: {
-        path: path.resolve(__dirname,"dist"),
-        filename: "bundle.js"
-    },
-    node: {
-        fs:"empty"
-    },
-    module: {
-        rules: [
-            {
-                test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
-                use: [
-                    {
-                    loader: "babel-loader",
-                    options: {
-                        presets: ["@babel/preset-react"]
-                        }
-                    }
-                ]
-            }
-        ]
-    },
+module.exports = env => {
     
-    devServer: {
-        compress: true,
-        index: "index.html",
-        host: "localhost",
-        port: 8080,
-        hot: true,
-        publicPath: "/dist/",
-        open: true
-    },
-    plugins: [
-        new Dotenv({
-            path:"./.env"
-        }),
-        new webpack.HotModuleReplacementPlugin({
-        })
-    ]
+    return{
+        entry:{
+            display:"./src/display.js"
+        },
+        output: {
+            path: path.resolve(__dirname,"dist"),
+            filename: "bundle.js"
+        },
+        node: {
+            fs:"empty"
+        },
+        target: "web",
+        module: {
+            rules: [
+                {
+                    test: /\.(js|jsx)$/,
+                    exclude: /node_modules/,
+                    use: [
+                        {
+                        loader: "babel-loader",
+                        options: {
+                            presets: ["@babel/preset-react"]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        devServer: {
+            compress: true,
+            index: "index.html",
+            host: "localhost",
+            port: 8080,
+            hot: true,
+            publicPath: "/dist/",
+            open: true
+        },
+        plugins: [
+            new webpack.HotModuleReplacementPlugin({
+            }),
+            new webpack.DefinePlugin({
+                'process.env.REACT_APP_KEY': JSON.stringify(env && env.REACT_APP_KEY || "")
+            })
+        ]
+
+
+    }
 };
 

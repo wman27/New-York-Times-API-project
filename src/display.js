@@ -2,6 +2,8 @@ import TopStories from "./index.js";
 import SearchBooks from "./books.js";
 import SearchArticles from "./articles.js";
 
+
+
 function DisplayItem () {
     let display_value = document.getElementById("display").getAttribute("value");
     if (display_value == "top_stories") {

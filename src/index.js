@@ -1,6 +1,3 @@
-require('dotenv').config();
-const api_key = process.env.REACT_APP_KEY;
-
 export default class TopStories extends React.Component {
     constructor(props) {
         super(props);
@@ -43,7 +40,7 @@ export default class TopStories extends React.Component {
     }
     componentDidMount() {
         fetch(      
-            "https://api.nytimes.com/svc/topstories/v2/home.json?api-key="+api_key
+            "https://api.nytimes.com/svc/topstories/v2/home.json?api-key="+process.env.REACT_APP_KEY
         )
         .then(response => this.errorHandle(response))
         .then(response => this.articleData(response))
