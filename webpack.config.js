@@ -8,7 +8,7 @@ module.exports = env => {
             display:"./src/display.js"
         },
         output: {
-            path: path.resolve(__dirname,"dist"),
+            path: path.resolve(__dirname,"public/dist"),
             filename: "bundle.js"
         },
         node: {
@@ -44,7 +44,7 @@ module.exports = env => {
             new webpack.HotModuleReplacementPlugin({
             }),
             new webpack.DefinePlugin({
-                'process.env.REACT_APP_KEY': JSON.stringify(env && env.REACT_APP_KEY || "")
+                "process.env.REACT_APP_KEY":JSON.stringify((process.env.REACT_APP_KEY) || "MY_API_KEY")
             })
         ]
 

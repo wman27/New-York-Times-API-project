@@ -28,7 +28,7 @@ export default class TopStories extends React.Component {
         if(!response.ok){
             document.getElementById("error").innerHTML="There was an error retrieving the data!";
         } else {
-            document.getElementById("error").innerHTML=" ";
+            document.getElementById("error").innerHTML="";
             return response.json();
         };
     }
@@ -40,11 +40,12 @@ export default class TopStories extends React.Component {
     }
     componentDidMount() {
         fetch(      
-            "https://api.nytimes.com/svc/topstories/v2/home.json?api-key="+process.env.REACT_APP_KEY
+            "/index-search"
         )
         .then(response => this.errorHandle(response))
         .then(response => this.articleData(response))
     }
+    
      
     render() {
         return (

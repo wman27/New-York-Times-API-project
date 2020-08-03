@@ -1,3 +1,5 @@
+const axios = require('axios')
+
 export default class SearchArticles extends React.Component {
     constructor(props) {
         super(props);
@@ -29,35 +31,34 @@ export default class SearchArticles extends React.Component {
     }
 
     errorHandle(response) {
-        if(!response.ok){
+        if(response.statusText !== "OK"){
             document.getElementById("error").innerHTML="There was an error retrieving the data!";
         } else {
             document.getElementById("error").innerHTML=" ";
-            return response.json();
+            return response;
         };
     }
 
-    searchResults(data) {
-        if(data !== undefined) {
-            this.setState({
-                article: data.response.docs
-            });
-        };
+    searchResults(result) {
+        this.setState({
+            article: result.data.response.docs
+        });
+        
     }
 
-    searchArticle() {
-        fetch(
-            "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+this.state.query+"&api-key="+process.env.REACT_APP_KEY
-        )
-        .then(response=>this.errorHandle(response))
-        .then(response=>this.searchResults(response))
+    async searchArticle() {
+        await axios.post("/article-search-item", {
+            search: this.state.query
+        }) 
+        .then(response => this.errorHandle(response))
+        .then(response => this.searchResults(response))
     }
 
     render() {
         return (
             <div>
                 <div className="container-fluid m-3">
-                    <p id="">Search for an article from New York Times.</p>
+                    <p id="">Search for articles about a topic from New York Times.</p>
                 </div>
 
                 <div className="container m-3">
